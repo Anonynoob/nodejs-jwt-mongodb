@@ -1,0 +1,38 @@
+{
+  "name": "mcs.api",
+  "version": "1.0.0",
+  "description": "Mcs Sms otp restfull API using nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anonynoob/mcs.api.git"
+  },
+  "keywords": [
+    "mcs.api"
+  ],
+  "author": "BillyC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Anonynoob/mcs.api/issues"
+  },
+  "homepage": "https://github.com/Anonynoob/mcs.api#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.18.0",
+    "jsonschema": "^1.2.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.1"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "dotenv": "^8.0.0",
+    "eslint-plugin-security": "^1.4.0",
+    "nodemon": "^1.19.1"
+  }
+}
