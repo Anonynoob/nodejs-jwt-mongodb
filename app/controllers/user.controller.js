@@ -4,6 +4,7 @@ var Validator = require('jsonschema').Validator;
 var v = new Validator();
 const key = process.env.TOKEN_KEY;
 const jwt = require('jsonwebtoken');
+const status = require('../helpers/errors');
 // var instance = 4;
 // var schema = { "type": "number" };
 // console.log(v.validate(instance, schema));
@@ -43,15 +44,17 @@ exports.findAll = (req, res) => {
 
 // Find a single note with a productId
 exports.findOne = (req, res) => {
-    // console.log(req.body.password);
-    // console.log(req.body.email);
+    console.log(req.body.password);
+    console.log(req.body.email);
     // console.log(key)
     User.findOne({ email: req.body.email })
         .then(user => {
             user.comparePassword(req.body.password, (err, isMatch) => {
                 if (isMatch) {
                     // console.log(user._id);
-                    var token = jwt.sign(user._id.toHexString(), key);
+                    var token = jwt.sign({user: user._id.toHexString()}, key, {
+                        expiresIn: 60
+                    });
                     // res.status(200).json({
                     //     userId: user.id,
                     //     username: user.username,
@@ -60,18 +63,21 @@ exports.findOne = (req, res) => {
                     //     token
                     // });
                     console.log(token);
-                    res.send(token);
+                    // return res.status(200).json({token: token});
+                    return status.acessAlowed(res, token);
+                    // return 'ok';
                 }
                 else {
                     console.log(err);
-                    res.status(400).json({ message: 'Invalid Password/Username' });
+                    res.status(400).send({ message: 'Invalid Password/Username' });
 
                 }
             });
 
         }).catch(err => {
             console.log(err);
-            return res.status(400).json({ message: 'Invalid Password/Username' });
+            // return res.status(400).json({ message: 'Invalid Password/Username' });
+            return status.unAuthorized(res);
         });
 };
 

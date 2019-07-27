@@ -3,55 +3,57 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cors = require('cors');
 require('dotenv/config');
-const key = process.env.TOKEN_KEY;
-const jwt = require('jsonwebtoken');
-const user = require('./app/models/user.model.js');
+// const key = process.env.TOKEN_KEY;
+// const jwt = require('jsonwebtoken');
+// const user = require('./app/models/user.model.js');
 //create Express App
 const app = express();
 // app.use(env());
 app.use(helmet())
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: true}))
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json())
+// app.use(bodyParser.json())
+app.use(express.json())
 app.use(cors());
 
 //JWT
-app.use(function (req, res, next) {
-   try {
-       const token = req.headers.authorization.split(' ')[1]
-       jwt.verify(token, key, function (err, payload) {
-           console.log('payload ' + payload)
-           if (payload) {
-               user.findById(payload._id).then(
-                   (doc) => {
-                       req.user = doc;
-                       next()
-                   }
-               ).catch(err =>{
-                    console.log('user not found '+ err);
-               });
-           } else {
-               console.log('payload null/undefined '+err);
-               next()
-           }
-       })
-   } catch (e) {
-       console.log(e);
-       return res.sendStatus(404);
-   } 
-});
+// app.use(function (req, res, next) {
+//    try {
+//        const token = req.headers.authorization.split(' ')[1]
+//        jwt.verify(token, key, function (err, payload) {
+//            console.log('payload ' + payload)
+//            if (payload) {
+//                user.findById(payload._id).then(
+//                    (doc) => {
+//                        req.user = doc;
+//                        next()
+//                    }
+//                ).catch(err =>{
+//                     console.log('user not found '+ err);
+//                });
+//            } else {
+//                console.log('payload null/undefined '+err);
+//                next()
+//            }
+//        })
+//    } catch (e) {
+//        console.log(e);
+//        return res.sendStatus(404);
+//    } 
+// });
 
 //database config
 const dbConfig = require('./config/database.config'),
  mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-
 //Connect to db
 mongoose.connect(dbConfig.url, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useFindAndModify: true,
+    useCreateIndex:true
 }).then(()=> {
     console.log("Success");
 }).catch(err => {
